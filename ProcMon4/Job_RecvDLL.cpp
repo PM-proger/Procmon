@@ -94,8 +94,12 @@ void DisplayJobResult_Recv(HWND hDlg, const HttpResponse_STRUCT& Resp) {
     else {
         Msg = L"Получение данных завершено. \r\nКод ответа сервера = " +
             std::to_wstring(g_Job_Recv.Resp.ResponseCode) + L"\r\n" +
+            L"rid=" + ConvertStrToWStr(g_Job_Recv.Resp.Rid) +
+            L"  status=" + ConvertStrToWStr(g_Job_Recv.Resp.Status) + L"\r\n"
             L"Расшифрованная строка = " + g_Job_Recv.Resp.DecryptedData + L"\r\n";
     }
+
+
 
     DisplayData_Recv(hDlg, Msg);
 } // DisplayJobResult_Recv

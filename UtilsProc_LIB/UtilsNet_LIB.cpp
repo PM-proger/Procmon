@@ -631,11 +631,6 @@ void SendTestData(Network* n, const std::wstring TestString,
 
 		if (RespParseError == 0) {
 
-			/*
-			std::cout << "Resp code = " << ResponseCode << std::endl;
-			std::cout << "Resp content = " << Content << std::endl;
-			*/
-
 			int ExtractError = ExtractJsonValue(Resp->Content, "rid", Resp->Rid);
 			//std::cout << ExtractError << "rid = " << JsonValue << std::endl;
 

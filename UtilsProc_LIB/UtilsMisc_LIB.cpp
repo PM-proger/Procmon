@@ -594,6 +594,33 @@ int ParseResponse(const std::string& Resp, int& ResponseCode, std::string& Conte
 }
 
 
+int SkipSpaces (const std::string& s, int CurIndex) {
+	// Пропускает все символы ПРОБЕЛ с символа [CurIndex].
+	// Возвращает индекс 1-ого НЕПРОБЕЛЬНОГО символа или на :npos.
+
+	int s_size = s.size();
+	if ((CurIndex < 0) || (CurIndex >= s_size)) {
+		return std::string::npos;
+	}
+
+	const char CharToSkip = ' ';
+	while (CurIndex < s_size) {
+
+		char ch = s[CurIndex];
+		if (ch == CharToSkip) {
+			// следующий символ
+			CurIndex++;
+		}
+		else {
+			// Вышли за пределы строки или на последнем символе - символ не найден
+			return CurIndex;
+		} 
+
+	}
+
+	return std::string::npos;
+}
+
 int ExtractJsonValue(const std::string& JsonString, const std::string& JsonName, 
 			std::string& JsonValue) {
 	// Очень-очень простой парсер - ищет значение  в строке JSon. 
@@ -607,17 +634,38 @@ int ExtractJsonValue(const std::string& JsonString, const std::string& JsonName,
 
 	JsonValue.clear();
 
-
+	int JsSize = JsonString.size();
 	const char* p2 = JsonString.data();
-	// в контенте находим строку data:
-	std::string Templ = "\"" + JsonName + "\":\"";
+	// в контенте находим строку _JsonName_:
+	std::string Templ = "\"" + JsonName + "\":";
+	//std::string Templ = "\"" + JsonName + "\":\"";
 	int Delim1 = JsonString.find(Templ, 0);
 	int Delim2 = std::string::npos;
 
+
 	if (Delim1 != std::string::npos) {
-		// пробросим Delim1 -> первый символ значения! Не кавычка!
-		Delim1 += Templ.size();
-		// завершающая кавычка
+		Delim1 = Delim1 + Templ.size();
+		if (Delim1 > JsSize - 1)
+			Delim1 = std::string::npos;
+		// Delim1 - первый символ после ":"
+	}
+
+	Delim1 = SkipSpaces(JsonString, Delim1);
+	// Здесь [Delim1] д.б. -> открывающая кавычка для значения JSON
+
+	if (Delim1 != std::string::npos) {
+		// проверим наличие кавычки
+		if (JsonString[Delim1] == '"') {
+			Delim1++;
+			if (Delim1 >= JsSize)
+				Delim1 = std::string::npos;
+		}
+	}
+
+
+	if (Delim1 != std::string::npos) {
+		// Delim1 -> первый символ значения! Не кавычка!
+		// поиск завершающей кавычки
 		Delim2 = JsonString.find("\"", Delim1 + 1);
 	}
 	else {
@@ -646,3 +694,10 @@ int ExtractJsonValue(const std::string& JsonString, const std::string& JsonName,
 void AppendStrToWStr(std::wstring& Dst, const std::string& Src) {
 	Dst.append(Src.begin(), Src.end());
 }
+
+std::wstring ConvertStrToWStr(const std::string& Src) {
+	std::wstring res;
+	res.append(Src.begin(), Src.end());
+	return res;
+}
+

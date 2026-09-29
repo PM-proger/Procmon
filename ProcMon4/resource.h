@@ -30,6 +30,8 @@
 #define IDC_SERVER_IP_RECV              1012
 #define IDC_SERVER_IP_SEND              1012
 #define IDC_SERVER_PAGE_SEND            1013
+#define IDC_STATIC_SERVER_PAGE_SEND2    1014
+#define IDC_STATIC_SERVER_PAGE_SEND_PORT 1014
 #define IDC_SERVER_PAGE_RECV            1015
 #define IDC_STATIC_SERVER_IP_RECV       1016
 #define IDC_STATIC                      -1

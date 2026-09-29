@@ -133,3 +133,5 @@ const char* GetUniqueID();
 // -------- строки -----------
 
 void AppendStrToWStr(std::wstring& Dst, const std::string& Src);
+
+std::wstring ConvertStrToWStr(const std::string& Src);

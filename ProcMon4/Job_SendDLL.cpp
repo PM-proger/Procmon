@@ -103,7 +103,10 @@ void DisplayJobResult_Send(HWND hDlg, const HttpResponse_STRUCT& Resp) {
     }
     else {
         Msg = L"Отправка данных завершена. \r\nКод ответа сервера = " +
-            std::to_wstring(g_Job_Send.Resp.ResponseCode) + L"\r\n";
+            std::to_wstring(g_Job_Send.Resp.ResponseCode) + L"\r\n" +
+            L"Ответ (JSON): " +
+            L"rid=" + ConvertStrToWStr(g_Job_Send.Resp.Rid) +
+            L"  status=" + ConvertStrToWStr(g_Job_Send.Resp.Status) + L"\r\n";
     }
 
     DisplayData_Send(hDlg, Msg);
@@ -339,6 +342,8 @@ INT_PTR CALLBACK SendDlls_Dialog_Handler(HWND hDlg, UINT message, WPARAM wParam,
                 else {
                     std::string ServerIP_Dlg;
                     std::string ServerPage_Dlg;
+
+                    // Получаем адрес и страницу сервера из диалогового окна
                     int res_ip = GetDialogString127(hDlg, IDC_SERVER_IP_SEND, ServerIP_Dlg);
                     int res_page = GetDialogString127(hDlg, IDC_SERVER_PAGE_SEND, ServerPage_Dlg);
 

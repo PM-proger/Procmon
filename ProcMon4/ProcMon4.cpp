@@ -3,15 +3,17 @@
 
 // IP-адрес сервера и параметр для POST (страница), порт = 80 (UtilsNet_LIB.h)
 // Реальный IP не раскрывается (принадлежит работодателю)
-#define SERVER_IP               "000.000.000.000"
+#define SERVER_IP               "127.0.0.1"
 #define PAGE_FOR_POST_REQUEST   "/p/applicants.php"
 
 
 // генерировать сигнал таймер для автоматического обновления списка ?
 // (список можно обновить и вручную)
 #define UseTimer
+
 // автообновление экрана
 #define AutoUpdateListView
+
 // доступность сетевых функций
 #define UseNetwork
 
@@ -37,7 +39,7 @@
 
 #include "UtilsProc_LIB.h"    
 #include "UtilsMisc_LIB.h"
-#include "UtilsWin_LIB.h"      // трей
+#include "UtilsWin_LIB.h"      // работа с треем
 
 #include "Job_SendDLL.h"      // процедуры отправки DLL (включая диалог отправки)
 #include "Job_RecvDLL.h"      // процедуры получения с сервера DLL (включая диалог получения)
@@ -49,14 +51,15 @@
 
 #define MAX_LOADSTRING 100
 
-// описание кнопок
+// ID кнопок в основном окне диалога 
 #define ID_BUTTON_TO_TRAY           1
 #define ID_BUTTON_RESTART_AS_ADMIN  2
 #define ID_KILL_PROCESS             3
 #define ID_SEND_DLL                 4
 #define ID_UPDATE_SCREEN            5
 #define ID_RECEIVE_FROM_SERVER      6
-// id таймера
+
+// ID таймера
 #define IDT_TIMER1 1
 
 // контекстное меню иконки в трее
@@ -72,7 +75,8 @@ struct ButtonDescription_STRUCT {
     int ButtonID;
     std::wstring TooltipText;
 };
-// массив описателей кнопки
+
+// псевдоним для массива описателей кнопки
 using ButtonDescriptions_ARRAY = std::vector<ButtonDescription_STRUCT>;
 
 // Перечень кнопок (создаются в InitInstance)
@@ -269,8 +273,6 @@ BOOL UpdateListViewItems(ProcessesList_CLASS& lvd) {
         }
 
     }
-
-    //#error - что-то здесь не так !!!
 
     int NItemsInListView = ListView_GetItemCount(g_hWndListView);
 
